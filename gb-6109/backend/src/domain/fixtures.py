@@ -39,4 +39,31 @@ FIXTURES = [
             ],
         },
     },
+    {
+        "code": "BR-R8-1124",
+        "title": "R8 段配方换号与接单重演",
+        "description": "BR-051 换号 BR-101（新旧号同页、旧号停用后改派 BR-052）；含同号不同配比整批退回、接单归属快照与重跑幂等。",
+        "payload": {
+            "initial": BASE, "keep_baseline": True,
+            "events": [
+                # 换号：新旧号先指向同一物理页，再停用旧号；不新增页面
+                {"op": "renumber", "pairs": [{"old_code": "BR-051", "new_code": "BR-101"}]},
+                # 停用的旧号改派给另一张配方
+                {"op": "reassign", "code": "BR-051", "to_code": "BR-052"},
+                # 同一步同号不同配比：整批退回，页池原样
+                {"op": "intake", "order_id": "SO-4001", "lines": [
+                    {"recipe": "BR-101", "fine_bp": 2600, "coarse_bp": 7400},
+                    {"recipe": "BR-101", "fine_bp": 2700, "coarse_bp": 7300},
+                ]},
+                # 合法接单：归属在接单时快照
+                {"op": "intake", "order_id": "SO-4002", "lines": [
+                    {"recipe": "BR-101", "fine_bp": 2600, "coarse_bp": 7400},
+                ]},
+                # 执行 + 重跑：重跑不改换归属，不产生新页
+                {"op": "apply_order", "order_id": "SO-4002"},
+                {"op": "apply_order", "order_id": "SO-4002"},
+                {"op": "release_baseline"},
+            ],
+        },
+    },
 ]

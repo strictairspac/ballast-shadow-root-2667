@@ -60,4 +60,6 @@ docker compose up -d --build --wait
 
 写时复制针对内存页池和一个配方目录，掉电发生点可在输入选择。 当前界面用 JSON 编辑业务资料，以 JSON 下载证据。过程和截图保存在批次的 [验收记录](../../test-artifacts/gb-6109/TESTING.md)。
 
+除断电重演（`revise`、`release_baseline`）外，资料还支持编号归属事件：`renumber`（换号，新旧号先同页再停用旧号、不新增物理页）、`reassign`（停用编号改派给另一张配方）、`intake`（接单并按接单时快照归属，同号不同配比整批退回、页池原样）、`apply_order`（按接单快照执行，重跑不改归属且幂等）。`BR-R8-1124 / R8 段`演示资料串起了换号、改派、退单、接单、执行与重跑全流程；「可见配方根」证据页提供编号登记簿与接单留痕两张表。
+
 [MIT License](LICENSE)

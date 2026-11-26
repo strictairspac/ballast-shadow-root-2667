@@ -53,5 +53,9 @@ export async function evidencePage(config, user, route) {
     el("dl", {class: "metrics"}, Object.entries(run.result.metrics).map(([label, value]) =>
       el("div", {}, el("dt", {}, label), el("dd", {}, cell(value))))),
     section("业务结果明细", run.result.rows.length ? resultTable(run.result.rows) : empty("此批次无明细。")),
+    section("编号归属登记簿（原填编号与实际配方页）",
+      run.result.registry?.length ? resultTable(run.result.registry) : empty("此批次无编号归属变更。")),
+    section("接单留痕（接单时归属与重跑记录）",
+      run.result.orders?.length ? resultTable(run.result.orders) : empty("此批次无接单记录。")),
     section("复核签署", signing));
 }
